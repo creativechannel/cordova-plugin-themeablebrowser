@@ -346,7 +346,7 @@ public class ThemeableBrowser extends CordovaPlugin {
         }
 
         // Always show location, this property is overwritten.
-        result.location = true;
+        //result.location = false;
 
         return result;
     }
@@ -534,6 +534,10 @@ public class ThemeableBrowser extends CordovaPlugin {
                 dialog = new ThemeableBrowserDialog(cordova.getActivity(),
                         android.R.style.Theme_Black_NoTitleBar,
                         features.hardwareback);
+                if(features.fullscreen){
+                	dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                	dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                }
                 if (!features.disableAnimation) {
                     dialog.getWindow().getAttributes().windowAnimations
                             = android.R.style.Animation_Dialog;
@@ -899,13 +903,13 @@ public class ThemeableBrowser extends CordovaPlugin {
                                 += close.getLayoutParams().width;
                     }
                 }
-
+             
                 // Add the views to our toolbar
                 toolbar.addView(leftButtonContainer);
                 // Don't show address bar.
                 // toolbar.addView(edittext);
                 toolbar.addView(rightButtonContainer);
-
+             
                 if (title != null) {
                     int titleMargin = Math.max(
                             leftContainerWidth, rightContainerWidth);
@@ -938,8 +942,9 @@ public class ThemeableBrowser extends CordovaPlugin {
                 lp.height = WindowManager.LayoutParams.MATCH_PARENT;
 
                 dialog.setContentView(main);
-                dialog.show();
                 dialog.getWindow().setAttributes(lp);
+                dialog.show();
+
                 // the goal of openhidden is to load the url and not display it
                 // Show() needs to be called to cause the URL to be loaded
                 if(features.hidden) {
