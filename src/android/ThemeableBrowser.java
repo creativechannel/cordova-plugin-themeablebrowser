@@ -16,7 +16,7 @@
        specific language governing permissions and limitations
        under the License.
 */
-package android;
+package com.initialxy.cordova.themeablebrowser;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
