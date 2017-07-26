@@ -920,7 +920,6 @@ public class ThemeableBrowser extends CordovaPlugin {
                 }
                 if (features.fullscreen) {
                    	dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                   	dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
                     dialog.getWindow().getDecorView().setSystemUiVisibility(
                             View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                             | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -931,9 +930,7 @@ public class ThemeableBrowser extends CordovaPlugin {
                    	// If full screen mode, we have to add inAppWebView before adding toolbar.
                     main.addView(inAppWebView);
                 }
-                if(features.landscape) {
-                		dialog.getOwnerActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                }
+
 
                 // Don't add the toolbar if its been disabled
                 if (features.location) {
@@ -948,9 +945,12 @@ public class ThemeableBrowser extends CordovaPlugin {
 
                 WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
                 lp.copyFrom(dialog.getWindow().getAttributes());
-                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-
+                
+                if(features.landscape) {
+                	 	lp.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+                }
+                	lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                	lp.height = WindowManager.LayoutParams.MATCH_PARENT;
                 dialog.setContentView(main);
                 dialog.getWindow().setAttributes(lp);
                 dialog.show();
