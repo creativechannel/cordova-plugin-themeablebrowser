@@ -1,5 +1,8 @@
 ﻿#If ignorance is bliss, then somebody knock the smile off my face
-
+.classpath
+.idea/
+.project
+.settings/
 *.csproj.user
 *.suo
 *.cache
@@ -21,3 +24,4 @@ Thumbs.db
 
 
  
+/bin/

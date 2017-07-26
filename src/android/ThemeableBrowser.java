@@ -16,11 +16,12 @@
        specific language governing permissions and limitations
        under the License.
 */
-package com.initialxy.cordova.themeablebrowser;
+package android;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -534,10 +535,6 @@ public class ThemeableBrowser extends CordovaPlugin {
                 dialog = new ThemeableBrowserDialog(cordova.getActivity(),
                         android.R.style.Theme_Black_NoTitleBar,
                         features.hardwareback);
-                if(features.fullscreen){
-                	dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                	dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                }
                 if (!features.disableAnimation) {
                     dialog.getWindow().getAttributes().windowAnimations
                             = android.R.style.Animation_Dialog;
@@ -919,10 +916,23 @@ public class ThemeableBrowser extends CordovaPlugin {
                     titleParams.setMargins(titleMargin, 0, titleMargin, 0);
                     toolbar.addView(title);
                 }
-
+                if(features.fullscreen){
+                }
                 if (features.fullscreen) {
-                    // If full screen mode, we have to add inAppWebView before adding toolbar.
+                   	dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                   	dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                    dialog.getWindow().getDecorView().setSystemUiVisibility(
+                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE);
+                   	// If full screen mode, we have to add inAppWebView before adding toolbar.
                     main.addView(inAppWebView);
+                }
+                if(features.landscape) {
+                		dialog.getOwnerActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                 }
 
                 // Don't add the toolbar if its been disabled
@@ -1409,6 +1419,7 @@ public class ThemeableBrowser extends CordovaPlugin {
         public boolean backButtonCanClose;
         public boolean disableAnimation;
         public boolean fullscreen;
+        public boolean landscape;
     }
 
     private static class Event {
