@@ -120,7 +120,8 @@ public class ThemeableBrowser extends CordovaPlugin {
      * @throws JSONException
      */
     public boolean execute(String action, CordovaArgs args, final CallbackContext callbackContext) throws JSONException {
-        if (action.equals("open")) {
+    		final Options features = parseFeature(args.optString(2));
+    		if (action.equals("open")) {
             this.callbackContext = callbackContext;
             final String url = args.getString(0);
             String t = args.optString(1);
@@ -128,7 +129,7 @@ public class ThemeableBrowser extends CordovaPlugin {
                 t = SELF;
             }
             final String target = t;
-            final Options features = parseFeature(args.optString(2));
+            
 
             this.cordova.getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -192,10 +193,16 @@ public class ThemeableBrowser extends CordovaPlugin {
                     PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, result);
                     pluginResult.setKeepCallback(true);
                     callbackContext.sendPluginResult(pluginResult);
+                    if(features.landscape){
+                        cordova.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                    }
                 }
             });
         }
         else if (action.equals("close")) {
+            if(features.landscape){
+                cordova.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+            }
             closeDialog();
         }
         else if (action.equals("injectScriptCode")) {
@@ -264,6 +271,9 @@ public class ThemeableBrowser extends CordovaPlugin {
      */
     @Override
     public void onReset() {
+        if(features.landscape){
+            cordova.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+        }
         closeDialog();
     }
 
@@ -272,6 +282,9 @@ public class ThemeableBrowser extends CordovaPlugin {
      * Stop listener.
      */
     public void onDestroy() {
+        if(features.landscape){
+            cordova.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+        }
         closeDialog();
     }
 
