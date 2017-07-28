@@ -247,9 +247,7 @@ public class ThemeableBrowser extends CordovaPlugin {
             injectDeferredObject(args.getString(0), jsWrapper);
         }
         else if (action.equals("show")) {
-	        	if(this.featureLandscape){
-	    	 		setActivityOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-	        }
+        	 	
             this.cordova.getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -259,7 +257,9 @@ public class ThemeableBrowser extends CordovaPlugin {
             PluginResult pluginResult = new PluginResult(PluginResult.Status.OK);
             pluginResult.setKeepCallback(true);
             this.callbackContext.sendPluginResult(pluginResult);
-            
+            if(this.featureLandscape){
+	    	 		setActivityOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+	        }
         }
         else if (action.equals("reload")) {
             if (inAppWebView != null) {
