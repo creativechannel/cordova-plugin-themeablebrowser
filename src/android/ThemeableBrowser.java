@@ -120,6 +120,14 @@ public class ThemeableBrowser extends CordovaPlugin {
      * @return
      * @throws JSONException
      */
+    
+    
+    public void setActivityOrientation(Integer orientation) {
+    		try {
+    	         this.cordova.getActivity().setRequestedOrientation(orientation);
+    		}catch(Exception e) {}
+    }
+    
     public boolean execute(String action, CordovaArgs args, final CallbackContext callbackContext) throws JSONException {
     		if (action.equals("open")) {
             this.callbackContext = callbackContext;
@@ -200,7 +208,7 @@ public class ThemeableBrowser extends CordovaPlugin {
         }
         else if (action.equals("close")) {
             if(this.featureLandscape){
-                this.cordova.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+                setActivityOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
             }
             closeDialog();
         }
@@ -239,9 +247,7 @@ public class ThemeableBrowser extends CordovaPlugin {
             injectDeferredObject(args.getString(0), jsWrapper);
         }
         else if (action.equals("show")) {
-        	 	if(this.featureLandscape){
-	        	    this.cordova.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-	        }
+        	 	
             this.cordova.getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -251,6 +257,9 @@ public class ThemeableBrowser extends CordovaPlugin {
             PluginResult pluginResult = new PluginResult(PluginResult.Status.OK);
             pluginResult.setKeepCallback(true);
             this.callbackContext.sendPluginResult(pluginResult);
+            if(this.featureLandscape){
+	    	 		setActivityOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+	        }
         }
         else if (action.equals("reload")) {
             if (inAppWebView != null) {
@@ -274,7 +283,7 @@ public class ThemeableBrowser extends CordovaPlugin {
     @Override
     public void onReset() {
     		if(this.featureLandscape){
-    			this.cordova.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+    			setActivityOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
         }
         closeDialog();
     }
@@ -285,7 +294,7 @@ public class ThemeableBrowser extends CordovaPlugin {
      */
     public void onDestroy() {
     		if(this.featureLandscape){
-            cordova.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+    			setActivityOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
         }
         closeDialog();
     }
@@ -569,6 +578,9 @@ public class ThemeableBrowser extends CordovaPlugin {
 
                 if (features.fullscreen) {
                     main = new FrameLayout(cordova.getActivity());
+                    if(features.landscape) {
+                    		((LinearLayout) main).setOrientation(LinearLayout.HORIZONTAL);
+                    }
                 } else {
                     main = new LinearLayout(cordova.getActivity());
                     ((LinearLayout) main).setOrientation(LinearLayout.VERTICAL);
@@ -966,7 +978,7 @@ public class ThemeableBrowser extends CordovaPlugin {
 
                 WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
                 lp.copyFrom(dialog.getWindow().getAttributes());
-                
+                //TODO: this might not be right 
                 if(features.landscape) {
                 	 	lp.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
                 }
