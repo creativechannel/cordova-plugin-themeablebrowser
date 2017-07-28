@@ -104,7 +104,7 @@ public class ThemeableBrowser extends CordovaPlugin {
     private static final String ERR_LOADFAIL = "loadfail";
     private static final String WRN_UNEXPECTED = "unexpected";
     private static final String WRN_UNDEFINED = "undefined";
-    private Boolean featureLandscape; 
+    private Boolean featureLandscape = false; 
 
     private ThemeableBrowserDialog dialog;
     private WebView inAppWebView;
@@ -200,7 +200,7 @@ public class ThemeableBrowser extends CordovaPlugin {
         }
         else if (action.equals("close")) {
             if(this.featureLandscape){
-                cordova.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+                this.cordova.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
             }
             closeDialog();
         }
@@ -274,7 +274,7 @@ public class ThemeableBrowser extends CordovaPlugin {
     @Override
     public void onReset() {
     		if(this.featureLandscape){
-            cordova.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+            this.cordova.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
         }
         closeDialog();
     }
@@ -285,7 +285,7 @@ public class ThemeableBrowser extends CordovaPlugin {
      */
     public void onDestroy() {
     		if(this.featureLandscape){
-            cordova.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+            this.cordova.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
         }
         closeDialog();
     }
@@ -399,7 +399,7 @@ public class ThemeableBrowser extends CordovaPlugin {
      */
     public void closeDialog() {
 		if(this.featureLandscape){
-            cordova.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+            this.cordova.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
         }
         this.cordova.getActivity().runOnUiThread(new Runnable() {
             @Override
