@@ -823,11 +823,14 @@ public class ThemeableBrowser extends CordovaPlugin {
                     CookieManager.getInstance().removeSessionCookie();
                 }
 
-                inAppWebView.loadUrl(url);
+                //inAppWebView.loadUrl(url);
                 inAppWebView.getSettings().setLoadWithOverviewMode(true);
                 inAppWebView.getSettings().setUseWideViewPort(true);
                 inAppWebView.requestFocus();
                 inAppWebView.requestFocusFromTouch();
+                inAppWebView.getSettings().setSupportZoom(true);
+                inAppWebView.loadUrl(url);
+                
 
                 // Add buttons to either leftButtonsContainer or
                 // rightButtonsContainer according to user's alignment
@@ -947,7 +950,8 @@ public class ThemeableBrowser extends CordovaPlugin {
                             | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
                             | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE);
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
                    	// If full screen mode, we have to add inAppWebView before adding toolbar.
                     main.addView(inAppWebView);
                 }
