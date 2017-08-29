@@ -105,12 +105,25 @@ public class ThemeableBrowser extends CordovaPlugin {
     private static final String WRN_UNEXPECTED = "unexpected";
     private static final String WRN_UNDEFINED = "undefined";
     private Boolean featureLandscape = false; 
+    private Boolean disableHardwareBack = false;
 
-    private ThemeableBrowserDialog dialog;
+	private ThemeableBrowserDialog dialog;
     private WebView inAppWebView;
     private EditText edittext;
     private CallbackContext callbackContext;
 
+    
+    
+    public Boolean getDisableHardwareBack() {
+		return disableHardwareBack;
+	}
+
+	public void setDisableHardwareBack(Boolean disableHardwareBack) {
+		this.disableHardwareBack = disableHardwareBack;
+	}
+    
+    
+    
     /**
      * Executes the request and returns PluginResult.
      *
@@ -189,6 +202,7 @@ public class ThemeableBrowser extends CordovaPlugin {
                     }
                     // BLANK - or anything else
                     else {
+                    		setDisableHardwareBack(true);
                         result = showWebPage(url, features);
                     }
 
@@ -251,6 +265,7 @@ public class ThemeableBrowser extends CordovaPlugin {
             PluginResult pluginResult = new PluginResult(PluginResult.Status.OK);
             pluginResult.setKeepCallback(true);
             this.callbackContext.sendPluginResult(pluginResult);
+            setDisableHardwareBack(false);
         }
         else if (action.equals("reload")) {
             if (inAppWebView != null) {
@@ -398,9 +413,10 @@ public class ThemeableBrowser extends CordovaPlugin {
      * Closes the dialog
      */
     public void closeDialog() {
-		if(this.featureLandscape){
-            this.cordova.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
-        }
+    		if(getDisableHardwareBack() == true) {
+    			return;
+    		}
+
         this.cordova.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -443,6 +459,9 @@ public class ThemeableBrowser extends CordovaPlugin {
             }
             
         });
+		if(this.featureLandscape){
+            this.cordova.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+        }
     }
 
     private void emitButtonEvent(Event event, String url) {
